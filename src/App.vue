@@ -1,14 +1,12 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import SiteNavigation from './components/SiteNavigation.vue';
 </script>
 
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-    </nav>
-  </header>
-
-  <RouterView />
+  <div class="flex flex-col min-h-screen font-Poppins bg-weather-primary">
+    <SiteNavigation />
+    <RouterView />
+  </div>
 </template>
 
