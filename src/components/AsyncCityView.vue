@@ -1,8 +1,9 @@
 <script setup>
 import axios from 'axios'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 
 const weatherApi = import.meta.env.VITE_OPEN_WEATHER_API_KEY
 
@@ -23,10 +24,23 @@ const getWeatherData = async () => {
       hour.currentTime = utc + 1000 * weatherData.data.timezone_offset
     })
 
+    // Fake Delay
+    await new Promise((res) => setTimeout(res, 50))
+
     return weatherData.data
   } catch (error) {
     console.log('🚀 ~ getWeatherData ~ error', error)
   }
+}
+
+const removeCity = async () => {
+  const cities = JSON.parse(localStorage.getItem('savedCities'))
+  const updatedCities = cities.filter((city) => city.id !== route.query.id)
+  localStorage.setItem('savedCities', JSON.stringify(updatedCities))
+
+  router.push({
+    name: 'home',
+  })
 }
 
 const weatherData = await getWeatherData()
@@ -40,8 +54,8 @@ const weatherData = await getWeatherData()
       class="text-white p-4 bg-weather-secondary w-full text-center"
     >
       <p>
-        You are currently previewing the city, click the "+" icon to add it to
-        your watch list.
+        Klicken Sie auf das "+"-Symbol, um die Stadt zu
+        Ihrer Liste hinzuzufügen.
       </p>
     </div>
 
@@ -141,6 +155,14 @@ const weatherData = await getWeatherData()
           </div>
         </div>
       </div>
+    </div>
+
+    <div
+      @click="removeCity"
+      class="flex items-center gap-2 py-12 text-white cursor-pointer duration-150 hover:text-red-500"
+    >
+      <i class="fa-solid fa-trash"></i>
+      <p>Löschen</p>
     </div>
   </div>
 </template>

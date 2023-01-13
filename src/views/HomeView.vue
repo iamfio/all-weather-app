@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '../api'
+import CityCardSkeleton from '../components/CityCardSkeleton.vue'
+import CityList from '../components/CityList.vue'
 
 const router = useRouter()
 
@@ -34,13 +36,8 @@ const getSearchResult = () => {
 }
 
 const previewCity = (searchResult) => {
-  console.log(
-    '🚀 ~ file: HomeView.vue:38 ~ previewCity ~ searchResult',
-    searchResult
-  )
-
   const [city, state] = searchResult.place_name.split(',')
-  
+
   router.push({
     name: 'cityView',
     params: { state: state.replaceAll(' ', ''), city },
@@ -58,7 +55,7 @@ const previewCity = (searchResult) => {
     <div class="pt-4 mb-8 relative">
       <input
         type="text"
-        placeholder="Search for a city"
+        placeholder="Stadt eingeben"
         v-model="searchQuery"
         @input="getSearchResult"
         class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-[0px_1px_0_0_#004e71]"
@@ -84,6 +81,15 @@ const previewCity = (searchResult) => {
           </li>
         </template>
       </ul>
+    </div>
+    <div class="flex flex-col gap-4">
+      <Suspense>
+        <CityList />
+
+        <template #fallback>
+          <CityCardSkeleton />
+        </template>
+      </Suspense>
     </div>
   </main>
 </template>

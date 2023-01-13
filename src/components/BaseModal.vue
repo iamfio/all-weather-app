@@ -25,7 +25,7 @@ defineProps({
               class="text-white mt-8 bg-weather-primary py-2 px-6"
               @click="$emit('close-modal')"
             >
-              Close
+              Schließen
             </button>
           </div>
         </Transition>
